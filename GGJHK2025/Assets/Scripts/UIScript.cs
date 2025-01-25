@@ -19,7 +19,7 @@ public class UIScript : MonoBehaviour
     }
     public void ScoreDisplay(int score,int badScore)
     {
-        scoreTxt[0].text = score.ToString();
-        scoreTxt[1].text = badScore.ToString();
+       // scoreTxt[0].text = score.ToString();
+       // scoreTxt[1].text = badScore.ToString();
     }
 }

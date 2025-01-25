@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     GameObject[] bubbles,items,borders;//halfGoogHalfBad
     float cloudScale=1,nextSpawn = 1,spt;
     public Transform mediumYAxis;
-    public int Score,badScore;
+    public int Score,badScore,finalScore;
     public
     Collider2D col;
     float parameter;
@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        start = true;
+        
         itemList = new GameObject[items.Length];
         for(int i = 0;i<items.Length;i++)
         {
@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
             it.SetActive(false);
         }
         uI = GetComponent<UIScript>();
-        RandomSpawn();
+        //RandomSpawn();
         spt = nextSpawn;
     }
 
@@ -49,12 +49,21 @@ public class GameManager : MonoBehaviour
             if (spt < 0)
             {
                 RandomSpawn();
-                nextSpawn = Random.Range(1, 3);
+                nextSpawn = Random.Range(0.5f, 0.8f);
                 spt = nextSpawn;
             }
             uI.ScoreDisplay(Score, badScore);
             EndGameCal();
         }
+        else
+        {
+            Bubble[] allBubbles = FindObjectsOfType<Bubble>();
+            foreach (Bubble b in allBubbles)
+            {
+                Destroy(b.gameObject);
+            }
+        }
+        
         
     }
     void RandomSpawn()
@@ -74,37 +83,46 @@ public class GameManager : MonoBehaviour
         float normalizedValue = (30 + result) / 60f;
         normalizedValue = Mathf.Clamp01(normalizedValue);
         col.gameObject.GetComponent<SpriteRenderer>().color = new Vector4(normalizedValue, normalizedValue, normalizedValue, 1);
-        if(result>=10|| result <= -10)
+        switch (result)
         {
-            switch(result)
-            {
 
-                case 10:
-                    itemList[0].SetActive(true);
-                    break;
-                case 20:
-                    itemList[1].SetActive(true);
-                    break;
-                case 30:
-                    itemList[2].SetActive(true);
-                    start = false;
-                    anim.SetTrigger("End");
-                    break;
-                case -10:
-                    itemList[3].SetActive(true);
-                    break;
-                case -20:
-                    itemList[4].SetActive(true);
-                    break;
-                case -30:
-                    itemList[5].SetActive(true);
-                    anim.SetTrigger("End");
-                    start = false;
-                    break;
+            case 10:
+                itemList[0].SetActive(true);
+                break;
+            case 20:
+                itemList[1].SetActive(true);
+                break;
+            case 30:
+                itemList[2].SetActive(true);
+                anim.SetTrigger("End");
+                start = false;
+                
+                break;
+            case -10:
+                itemList[3].SetActive(true);
+                break;
+            case -20:
+                itemList[4].SetActive(true);
+                break;
+            case -30:
+                itemList[5].SetActive(true);
+                start = false;
+                anim.SetTrigger("End");
 
-            }
-            
+                break;
+
         }
+    }
+    public void QuitGame()
+    {
+        start = false;
+        Bubble[] allBubbles = FindObjectsOfType<Bubble>();
+        foreach(Bubble b in allBubbles)
+        {
+            Destroy(b.gameObject);
+        }
+        
+        
     }
     IEnumerator Hammer(float time)
     {
@@ -126,6 +144,13 @@ public class GameManager : MonoBehaviour
     }
     public void StartGame()
     {
-        anim.SetTrigger("Start");
+        anim.SetBool("Start",true);
+        StartCoroutine(WaitToBeginAndEnd());
+    }
+    IEnumerator WaitToBeginAndEnd()
+    {
+        yield return new WaitForSeconds(8f);
+        anim.SetBool("Start", false);
+        start = true;
     }
 }
