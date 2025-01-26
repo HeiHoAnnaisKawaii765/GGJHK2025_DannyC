@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
     Animator anim;
     
     public bool freezed;
-
+    [SerializeField]
     CanvasController vidMan;
 
     bool start, end;
@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviour
                 nextSpawn = Random.Range(0.5f, 0.8f);
                 spt = nextSpawn;
             }
-            uI.ScoreDisplay(Score, badScore);
+            //uI.ScoreDisplay(Score, badScore);
             EndGameCal();
         }
         else
@@ -93,7 +93,10 @@ public class GameManager : MonoBehaviour
         col.gameObject.GetComponent<SpriteRenderer>().color = new Vector4(normalizedValue, normalizedValue, normalizedValue, 1);
         switch (result)
         {
-
+            case 5:
+                //itemList[2].SetActive(true);
+                StartCoroutine(WaitNEnd(0));
+                break;
             case 10:
                 itemList[0].SetActive(true);
                 break;
@@ -104,6 +107,10 @@ public class GameManager : MonoBehaviour
                 itemList[2].SetActive(true);
                 StartCoroutine(WaitNEnd(0));
 
+                break;
+            case -5:
+                //itemList[5].SetActive(true);
+                StartCoroutine(WaitNEnd(2));
                 break;
             case -10:
                 itemList[3].SetActive(true);
@@ -122,6 +129,7 @@ public class GameManager : MonoBehaviour
     public void QuitGame()
     {
         start = false;
+        vidMan.PlayVideoInList(3);
         Bubble[] allBubbles = FindObjectsOfType<Bubble>();
         foreach(Bubble b in allBubbles)
         {
@@ -130,6 +138,7 @@ public class GameManager : MonoBehaviour
         
         
     }
+    
     IEnumerator Hammer(float time)
     {
         yield return new WaitForSeconds(time);
