@@ -20,6 +20,8 @@ public class CanvasController : MonoBehaviour
     GameManager manager;
     [SerializeField]
     VideoClip[] video;
+    
+    SoundController soundController;
     // for tutorial //
 
     public Button but_hitVid, but_merVid;
@@ -50,9 +52,17 @@ public class CanvasController : MonoBehaviour
         vidPlayer.loopPointReached += OnVideoFinished;
         obj_scrn.SetActive(true);
         but_clsVid.gameObject.SetActive(false);
+        vidPlayer.clip = video[1];
         vidPlayer.Prepare();
         vidPlayer.Play();
         audSrc.Stop();
+    }
+    public void PlayVideoInList(int type)
+    {
+        vidPlayer.clip = video[type];
+        vidPlayer.Prepare();
+        vidPlayer.Play();
+
     }
     void OnTutButClicked() {
         //Debug.Log("but_tut is clicked .");
@@ -119,7 +129,7 @@ public class CanvasController : MonoBehaviour
         but_skipVid.onClick.AddListener(OnVidSkipButClicked);
 
         but_hitVid.onClick.AddListener(OnHitVidButClicked);
-        but_merVid.onClick.AddListener(OnMerVidButClicked);
+        //but_merVid.onClick.AddListener(OnMerVidButClicked);
         but_clsTut.onClick.AddListener(OnClsTutButClicked);
     }
 

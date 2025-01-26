@@ -20,10 +20,12 @@ public class Bubble : MonoBehaviour
     int ind = 0;
     public
     GameObject item;
+    SoundController soundController;
     // Start is called before the first frame update
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
+        soundController = FindObjectOfType<SoundController>();
         Destroy(gameObject, stayTime);
         itemPos = transform;
         InitBubble();
@@ -70,6 +72,7 @@ public class Bubble : MonoBehaviour
         if (transform.localScale.x<1.25)
         {
             //addScore
+            soundController.OnClickToPlay(1);
             if(haveItem)
             {
                 item.transform.SetParent(null)
@@ -99,9 +102,9 @@ public class Bubble : MonoBehaviour
         {
             dragged = false;
         }
-        
-        
-       
+
+        soundController.OnClickToPlay(0);
+
         transform.localScale -= new Vector3(0.25f, 0.25f, 0);
         
 
@@ -138,12 +141,13 @@ public class Bubble : MonoBehaviour
             float y=0f;
             float randomSize = Random.Range(1, 3);
             newB.gameObject.transform.localScale = new Vector3(randomSize, randomSize, 1);//size
-            //transform.localScale = new Vector3(y * 1.5f, y * 1.5f, 1);
-            
+                                                                                          //transform.localScale = new Vector3(y * 1.5f, y * 1.5f, 1);
+
             // Handle item assignment
             //HandleItemAssignment(newB);
 
             // Destroy the merged bubbles
+            soundController.OnClickToPlay(0);
             Destroy(otherBubble.gameObject);
             Destroy(gameObject);
         }
@@ -179,7 +183,8 @@ public class Bubble : MonoBehaviour
         }
         if(collision==gameManager.col)
         {
-            if(badMemory)
+            soundController.OnClickToPlay(0);
+            if (badMemory)
             {
                 gameManager.AddGameScore(0, 1*(int)transform.localScale.x);
             }

@@ -6,7 +6,7 @@ public class SoundController : MonoBehaviour
 {
     // Start is called before the first frame update
     [SerializeField]
-    AudioClip[] audioClips;
+    AudioClip[] audioClips,sEClips;
     [SerializeField]
     AudioSource source;
     GameManager manager;
@@ -21,19 +21,16 @@ public class SoundController : MonoBehaviour
     void Update()
     {
         
-        switch (manager.Score - manager.badScore)
-        {
-            case  <=-10:
-                source.clip = audioClips[1];
-                break;
-            case >= 10:
-                source.clip = audioClips[0];
-                break;
+        
+        
+       
 
 
-        }
+    }
 
-
+    public void OnClickToPlay(int type)
+    {
+        source.clip = sEClips[type];
     }
     void Transition(int type)
     {

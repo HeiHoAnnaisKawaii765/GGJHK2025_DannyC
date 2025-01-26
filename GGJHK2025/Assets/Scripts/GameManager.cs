@@ -21,8 +21,11 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     Animator anim;
-
+    
     public bool freezed;
+
+    CanvasController vidMan;
+
     bool start, end;
     // Start is called before the first frame update
     void Start()
@@ -62,6 +65,11 @@ public class GameManager : MonoBehaviour
             {
                 Destroy(b.gameObject);
             }
+            if(end)
+            {
+                vidMan.vidPlayer.isLooping = true;
+            }
+            
         }
         
         
@@ -94,9 +102,8 @@ public class GameManager : MonoBehaviour
                 break;
             case 30:
                 itemList[2].SetActive(true);
-                anim.SetTrigger("End");
-                start = false;
-                
+                StartCoroutine(WaitNEnd(0));
+
                 break;
             case -10:
                 itemList[3].SetActive(true);
@@ -106,8 +113,7 @@ public class GameManager : MonoBehaviour
                 break;
             case -30:
                 itemList[5].SetActive(true);
-                start = false;
-                anim.SetTrigger("End");
+                StartCoroutine(WaitNEnd(2));
 
                 break;
 
@@ -152,5 +158,13 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(8f);
         anim.SetBool("Start", false);
         start = true;
+    }
+    IEnumerator WaitNEnd(int varl)
+    {
+        start = false;
+        end = true;
+        anim.SetTrigger("End");
+        yield return new WaitForSeconds(3f);
+        vidMan.PlayVideoInList(varl);
     }
 }
